@@ -9,7 +9,7 @@ Automated management of LLM infrastructure in Kubernetes: autoscaling, HPA, roll
 ![controller-runtime](https://img.shields.io/badge/controller--runtime-v0.19-blue?style=flat)
 ![Prometheus](https://img.shields.io/badge/Prometheus-integrated-E6522C?style=flat&logo=prometheus)
 ![LLM](https://img.shields.io/badge/LLM-Ready-10A37F?style=flat)
-![License](https://img.shields.io/badge/License-Apache_2.0-yellow?style=flat)
+![CI](https://github.com/DennisMRitchie/go-k8s-llm-operator/actions/workflows/go.yml/badge.svg) ![License](https://img.shields.io/badge/License-Apache_2.0-yellow?style=flat)
 
 ---
 
