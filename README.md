@@ -184,6 +184,6 @@ This operator is part of a cohesive **Go LLM Platform**:
 
 Built with ❤️ by **Konstantin Lychkov**  
 Senior Go Developer | Go + LLM/NLP + Kubernetes  
-Warsaw, Poland • Open to Remote Worldwide
+Moscow, Russia • Open to Remote Worldwide
 
 ⭐ Star the repo — help the community run LLM at scale!
