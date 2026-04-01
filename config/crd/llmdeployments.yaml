@@ -1,0 +1,157 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: llmdeployments.ai.dennisritchie.dev
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.0
+spec:
+  group: ai.dennisritchie.dev
+  names:
+    kind: LLMDeployment
+    listKind: LLMDeploymentList
+    plural: llmdeployments
+    singular: llmdeployment
+    shortNames:
+      - llmd
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Model
+          type: string
+          jsonPath: .spec.modelName
+        - name: Replicas
+          type: integer
+          jsonPath: .status.observedReplicas
+        - name: QPS
+          type: integer
+          jsonPath: .status.currentQPS
+        - name: Phase
+          type: string
+          jsonPath: .status.phase
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          description: LLMDeployment is the Schema for the llmdeployments API.
+          type: object
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - modelName
+                - image
+              properties:
+                modelName:
+                  type: string
+                  minLength: 1
+                image:
+                  type: string
+                  minLength: 1
+                replicas:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  default: 1
+                maxReplicas:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  default: 10
+                targetQPS:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  default: 1000
+                targetLatencyMs:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                scalingMetric:
+                  type: string
+                  enum: [QPS, Latency, GPU, CPU]
+                  default: QPS
+                gpuRequired:
+                  type: boolean
+                  default: false
+                guardrails:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: false
+                    image:
+                      type: string
+                    maxTokensPerRequest:
+                      type: integer
+                      format: int32
+                      minimum: 1
+                    blockPromptInjection:
+                      type: boolean
+                      default: true
+                prometheus:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: true
+                    port:
+                      type: integer
+                      format: int32
+                      default: 9090
+                    path:
+                      type: string
+                      default: /metrics
+            status:
+              type: object
+              properties:
+                observedReplicas:
+                  type: integer
+                  format: int32
+                currentQPS:
+                  type: integer
+                  format: int32
+                currentLatencyMs:
+                  type: integer
+                  format: int32
+                phase:
+                  type: string
+                lastScaled:
+                  type: string
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - lastTransitionTime
+                      - message
+                      - reason
+                      - status
+                      - type
+                    properties:
+                      lastTransitionTime:
+                        type: string
+                        format: date-time
+                      message:
+                        type: string
+                      observedGeneration:
+                        type: integer
+                        format: int64
+                      reason:
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string

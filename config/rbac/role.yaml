@@ -1,0 +1,49 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: llm-operator-manager-role
+rules:
+  # LLMDeployment CRD
+  - apiGroups: ["ai.dennisritchie.dev"]
+    resources: ["llmdeployments"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["ai.dennisritchie.dev"]
+    resources: ["llmdeployments/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: ["ai.dennisritchie.dev"]
+    resources: ["llmdeployments/finalizers"]
+    verbs: ["update"]
+  # Core workloads
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["autoscaling"]
+    resources: ["horizontalpodautoscalers"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Events
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: llm-operator-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: llm-operator-manager-role
+subjects:
+  - kind: ServiceAccount
+    name: llm-operator-controller-manager
+    namespace: llm-operator-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: llm-operator-controller-manager
+  namespace: llm-operator-system
