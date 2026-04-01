@@ -1,6 +1,6 @@
 module github.com/DennisMRitchie/go-k8s-llm-operator
 
-go 1.23
+go 1.23.0
 
 require (
 	github.com/prometheus/client_golang v1.20.0
